@@ -26,7 +26,6 @@ func _ready():
 	board_state[12][9] = 1
 	board_state[11][8] = 1
 	
-	
 	for i in grid_size:
 		var row = []
 		var row_label = []
@@ -57,7 +56,7 @@ func _sum(a: int, b: int) -> int:
 func _on_timer_timeout() -> void:
 	_resolve_step()
 
-func _set_cell(x: int, y: int, value: int, arr) -> void:
+func _set_cell(x: int, y: int, value: int) -> void:
 	board_state[x][y] = value
 	board_components[x][y].color = Color(alive_color if value == 1 else dead_color)
 	board_labels[x][y].text = str(x) + ", " + str(y)
@@ -67,7 +66,7 @@ func _resolve_step() -> void:
 	
 	for i in current_state.size():
 		for j in current_state[0].size():
-			_set_cell(i, j, _resolve_cell(i, j, current_state), current_state)
+			_set_cell(i, j, _resolve_cell(i, j, current_state))
 			
 	
 func _resolve_cell(x: int, y: int, array: Array) -> int:
@@ -102,3 +101,23 @@ func _get_neighboring_cells(x: int, y: int, array: Array) -> int:
 
 func _is_valid(x: int, y: int, array: Array) -> bool:
 	return x in range(0, array.size()) and y in range(0, array[0].size())
+
+func _input(_event):
+	if Input.is_action_just_pressed("pause"):
+		_toggle_timer()
+	elif Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		_freehand(_event.global_position.x, _event.global_position.y)
+
+func _toggle_timer():
+	var timer: Timer = $Timer
+	if timer.is_stopped():
+		timer.start()
+	else:
+		timer.stop()
+
+func _freehand(global_x, global_y):
+	var translated_x = int(global_x / cell_size)
+	var translated_y = int(global_y / cell_size)
+	
+	if _is_valid(translated_x, translated_y, board_state):
+		_set_cell(translated_x, translated_y, 1)
