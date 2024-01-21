@@ -28,7 +28,6 @@ func _ready():
 	
 	for i in grid_size:
 		var row = []
-		var row_label = []
 		for j in grid_size:
 			var t = ColorRect.new()
 			t.size = Vector2(cell_size - 1, cell_size - 1)
@@ -39,16 +38,9 @@ func _ready():
 			
 			var l = Label.new()
 			l.position = Vector2(i * cell_size, j * cell_size)
-			l.text = str(board_state[i][j])
-			row_label.append(l)
+			l.text = str(i) + ", " + str(j)
 			add_child(l)
 		board_components.append(row)
-		board_labels.append(row_label)
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 func _sum(a: int, b: int) -> int:
 	return a + b
@@ -59,7 +51,6 @@ func _on_timer_timeout() -> void:
 func _set_cell(x: int, y: int, value: int) -> void:
 	board_state[x][y] = value
 	board_components[x][y].color = Color(alive_color if value == 1 else dead_color)
-	board_labels[x][y].text = str(x) + ", " + str(y)
 
 func _resolve_step() -> void:
 	var current_state = board_state.duplicate(true)
