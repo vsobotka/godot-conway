@@ -1,11 +1,10 @@
 extends Node2D
 
-var cell_size = 50
-var grid_size = 15
+var cell_size = 25
+var grid_size = 30
 
 var board_state: Array = []
 var board_components: Array = []
-var board_labels: Array = []
 
 var dead_color = Color(.5, .5, .5, .5)
 var alive_color = Color(.9, .9, .9, .9)
@@ -35,11 +34,6 @@ func _ready():
 			t.position = Vector2(i * cell_size, j * cell_size)
 			add_child(t)
 			row.append(t)
-			
-			var l = Label.new()
-			l.position = Vector2(i * cell_size, j * cell_size)
-			l.text = str(i) + ", " + str(j)
-			add_child(l)
 		board_components.append(row)
 
 func _sum(a: int, b: int) -> int:
